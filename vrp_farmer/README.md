@@ -7,3 +7,4 @@ add ``vrp_farmer`` to you ``server.cfg`` file.
 
 #Required Resources
 #pogressBar 
+https://github.com/EqualizerNetwork/vRP_Scripts/tree/master/pogressBar
