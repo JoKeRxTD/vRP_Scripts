@@ -91,7 +91,7 @@ Citizen.CreateThread(function()
         Draw3DText(x, y, z-0.8,"~w~Press ~r~[~r~E~r~] ~w~to process weed",0.1,0.1)
         DrawMarker(27, x, y, z,0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 2.0, 2.0, 2.0, 2, 250, 0, 50, false, true, 2, nil, nil, true ) 
         if(IsControlJustReleased(1, 51))then
-          TriggerEvent('EGC:processSeeds')
+          TriggerServerEvent('EGC:takeSeed')
         end
       end
     end

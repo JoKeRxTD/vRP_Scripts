@@ -22,7 +22,8 @@ AddEventHandler('EGC:takeSeed', function()
     local thePlayer = source
 	local user_id = vRP.getUserId({thePlayer}) 
     if vRP.tryGetInventoryItem({user_id, "weed_seeds", 1, false}) then           
-          TriggerClientEvent('EGC:farmWeed', thePlayer)  
+          TriggerClientEvent('EGC:processSeeds', thePlayer)
+
           
    else 
     vRPclient.notify(thePlayer, {"~b~You clearly have no seeds!"})  
