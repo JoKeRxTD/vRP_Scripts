@@ -14,33 +14,50 @@ timplagradinarit = 10      -- planting time in  seconds
 timplacules =  10            -- harvesting time in seconds
  
        
-local plantsObject = GetHashKey("prop_bush_lrg_01c_cr")         -- the plant
+local plantsObject = GetHashKey("bkr_prop_weed_med_01a")         -- the plant
 local plants = {}
 
 caciula = false 
 
-RegisterNetEvent('EGC:farm')
-AddEventHandler('EGC:farm', function()
+RegisterNetEvent('EGC:farmWeed')
+AddEventHandler('EGC:farmWeed', function()
     --! Debug
     --print("[Debug] This Event was triggered!")
     --! Function
      local player = GetPlayerPed(-1)
-     local coord = GetEntityCoords(player) 
+     local coord = GetEntityCoords(player)  
        if (GetDistanceBetweenCoords(coord.x, coord.y, coord.z, x, y, z-1.7, true)) < 40.0 then   
          TaskStartScenarioInPlace(player,"WORLD_HUMAN_GARDENER_PLANT", 0, true)   
         vRP.notify({"Processing wait " ..timplagradinarit.. " Seconds"})
-		TriggerEvent('pogressBar:drawBar', 10000, 'You are watering')
+		  TriggerEvent('pogressBar:drawBar', 10000, 'You are garther your seeds')
+         Citizen.Wait(timplagradinarit * 1000)     -- time for planting
+         ClearPedTasksImmediately(player)   
+          TriggerServerEvent('EGC:plantSeeds', player)  
+             end      
+end)
+
+RegisterNetEvent('EGC:processSeeds')
+AddEventHandler('EGC:processSeeds', function()
+    --! Debug
+    --print("[Debug] This Event was triggered!")
+    --! Function
+     local player = GetPlayerPed(-1)
+     local coord = GetEntityCoords(player)  
+       if (GetDistanceBetweenCoords(coord.x, coord.y, coord.z, x, y, z-1.7, true)) < 40.0 then   
+         TaskStartScenarioInPlace(player,"WORLD_HUMAN_GARDENER_PLANT", 0, true)   
+        vRP.notify({"Processing wait " ..timplagradinarit.. " Seconds"})
+		TriggerEvent('pogressBar:drawBar', 10000, 'You are watering your seeds')
          Citizen.Wait(timplagradinarit * 1000)     -- time for planting
          RequestModel(plantsObject)
          plants[#plants+1] = CreateObject(plantsObject, coord.x, coord.y, coord.z-3.2, false, false, true)
          vRP.notify({"You Pick for a while " ..timplacules.. " Seconds"})
-		  TriggerEvent('pogressBar:drawBar', 10000, 'You Pick')
+		  TriggerEvent('pogressBar:drawBar', 10000, 'You Pick the Plant')
           Citizen.Wait(timplagradinarit * 1000)     -- time for planting  
              for i,v in pairs (plants) do 
            
           DeleteObject(plants[i])
           plants[i] = nil
-          TriggerServerEvent('EGC:plantSeeds', player)
+          TriggerServerEvent('EGC:processSeeds', player)
           ClearPedTasksImmediately(player)   
              end
        else
@@ -55,7 +72,7 @@ Citizen.CreateThread(function()
   local player = GetPlayerPed(-1)
   local coord = GetEntityCoords(player) 
   if (GetDistanceBetweenCoords(coord.x, coord.y, coord.z, 2879.5114746094,4489.646484375,48.19352722168, true)) < 5.0 then    
-    Draw3DText(2879.5114746094,4489.646484375,48.19352722168-0.8,"~w~Press ~r~E ~w~to sell Weed",0.1,0.1)
+    Draw3DText(2879.5114746094,4489.646484375,48.19352722168-0.8,"~w~Press ~r~[~r~E~r~] ~w~to sell Weed",0.1,0.1)
     DrawMarker(27, 2879.5114746094,4489.646484375,47.21352722168,0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 2.0, 2.0, 2.0, 255, 128, 0, 50,false, true, 2, nil, nil, true )
     if(IsControlJustReleased(1, 51))then
       TriggerServerEvent('EGC:payCheck')
@@ -71,10 +88,10 @@ Citizen.CreateThread(function()
       local player = GetPlayerPed(-1)
       local coord = GetEntityCoords(player)
       if (GetDistanceBetweenCoords(coord.x, coord.y, coord.z, x, y, z-1.7, true)) < 10.0 then   
-        Draw3DText(x, y, z-0.8,"~g~Plant your seeds",0.1,0.1)
+        Draw3DText(x, y, z-0.8,"~w~Press ~r~[~r~E~r~] ~w~to process weed",0.1,0.1)
         DrawMarker(27, x, y, z,0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 2.0, 2.0, 2.0, 2, 250, 0, 50, false, true, 2, nil, nil, true ) 
         if(IsControlJustReleased(1, 51))then
-          TriggerServerEvent('EGC:takeSeed')
+          TriggerEvent('EGC:processSeeds')
         end
       end
     end
@@ -86,10 +103,10 @@ Citizen.CreateThread(function()
     local player = GetPlayerPed(-1)
     local coord = GetEntityCoords(player)
     if (GetDistanceBetweenCoords(coord.x, coord.y, coord.z,2191.9892578125,5595.2192382813,53.772525787354 , true)) < 5.0 then   
-      Draw3DText(2191.9892578125,5595.2192382813,53.772525787354-0.8,"~w~Press ~r~E ~w~to buy weed seeds",0.1,0.1)
+      Draw3DText(2191.9892578125,5595.2192382813,53.772525787354-0.8,"~w~Press ~r~[~r~E~r~] ~w~to farm seeds",0.1,0.1)
       DrawMarker(27, 2191.9892578125,5595.2192382813,53.772525787354,0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 2.0, 2.0, 2.0, 0, 153, 250, 50, false, true, 2, nil, nil, true ) 
       if(IsControlJustReleased(1, 51))then
-        TriggerServerEvent('EGC:buySeeds')
+        TriggerEvent('EGC:farmWeed')
       end 
     end
   end

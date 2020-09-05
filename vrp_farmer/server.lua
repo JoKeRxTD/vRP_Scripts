@@ -22,7 +22,7 @@ AddEventHandler('EGC:takeSeed', function()
     local thePlayer = source
 	local user_id = vRP.getUserId({thePlayer}) 
     if vRP.tryGetInventoryItem({user_id, "weed_seeds", 1, false}) then           
-          TriggerClientEvent('EGC:farm', thePlayer)  
+          TriggerClientEvent('EGC:farmWeed', thePlayer)  
           
    else 
     vRPclient.notify(thePlayer, {"~b~You clearly have no seeds!"})  
@@ -31,36 +31,49 @@ end)
 
 amount = 100           -- the cost for 1 plant seed
 
-RegisterServerEvent('EGC:buySeeds')
-AddEventHandler('EGC:buySeeds',function()
-    --! Debug
-    --print("[Debug] This Event was triggered!")
-    --! Function
-    local thePlayer = source
-    local user_id = vRP.getUserId({thePlayer})
-    local money =  vRP.getMoney({user_id})
-      if user_id ~= nil then 
-        vRP.prompt({thePlayer, "How many seeds do you want?", "", function(player,cat) 
-            cat = tonumber(cat)  
-              if (cat > 0) then 
-                local cost = cat *amount 
-                if (money >= cost) then 
-                    vRP.tryPayment({user_id, cost}) 
-                    vRP.giveInventoryItem({user_id,"weed_seeds",cat,true})
-                    vRPclient.notify(thePlayer,{"You payed £"..cost})
-                else 
-                    vRPclient.notify(thePlayer,{"You don't have enough money"})
-                end
-            else  
-                vRPclient.notify(thePlayer,{"You can't buy negative quantities"})
-            end
-        end})
-    end
+-- RegisterServerEvent('EGC:buySeeds')
+-- AddEventHandler('EGC:buySeeds',function()
+--     --! Debug
+--     --print("[Debug] This Event was triggered!")
+--     --! Function
+--     local thePlayer = source
+--     local user_id = vRP.getUserId({thePlayer})
+--     local money =  vRP.getMoney({user_id})
+--       if user_id ~= nil then 
+--         vRP.prompt({thePlayer, "How many seeds do you want?", "", function(player,cat) 
+--             cat = tonumber(cat)  
+--               if (cat > 0) then 
+--                 local cost = cat *amount 
+--                 if (money >= cost) then 
+--                     vRP.tryPayment({user_id, cost}) 
+--                     vRP.giveInventoryItem({user_id,"weed_seeds",cat,true})
+--                     vRPclient.notify(thePlayer,{"You payed £"..cost})
+--                 else 
+--                     vRPclient.notify(thePlayer,{"You don't have enough money"})
+--                 end
+--             else  
+--                 vRPclient.notify(thePlayer,{"You can't buy negative quantities"})
+--             end
+--         end})
+--     end
 
-end)
+-- end)
 
 RegisterServerEvent('EGC:plantSeeds')
 AddEventHandler('EGC:plantSeeds', function()
+    --! Debug
+    --print("[Debug] This Event was triggered!")
+    --! Function
+     local thePlayer = source
+	local user_id = vRP.getUserId({thePlayer})
+   if user_id ~= nil then 
+    vRP.giveInventoryItem({user_id, "weed_seeds", 1, true}) 
+   end
+
+end)
+
+RegisterServerEvent('EGC:processSeeds')
+AddEventHandler('EGC:processSeeds', function()
     --! Debug
     --print("[Debug] This Event was triggered!")
     --! Function
